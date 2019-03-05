@@ -1,13 +1,16 @@
-package ke.co.ekenya.ksiundu.moviemax;
+package ke.co.ekenya.ksiundu.moviemax.ui;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
+
+import ke.co.ekenya.ksiundu.moviemax.R;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -32,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-
+                getStarted();
             }
 
             @Override
@@ -46,5 +49,10 @@ public class SplashActivity extends AppCompatActivity {
             }
         });
         animator.start();
+    }
+
+    public void getStarted() {
+        Intent mIntent = new Intent(SplashActivity.this, MainActivity.class);
+        startActivity(mIntent);
     }
 }
