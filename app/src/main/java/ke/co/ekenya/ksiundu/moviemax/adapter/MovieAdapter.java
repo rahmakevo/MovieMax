@@ -1,6 +1,7 @@
 package ke.co.ekenya.ksiundu.moviemax.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,42 +9,44 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ke.co.ekenya.ksiundu.moviemax.R;
 import ke.co.ekenya.ksiundu.moviemax.model.MovieModel;
+import ke.co.ekenya.ksiundu.moviemax.ui.MovieDetailActivity;
 
-public abstract class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder> {
-    private List<MovieModel> mMovieList;
-    private LayoutInflater mInflater;
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder> {
+    private ArrayList<MovieModel> mMovieList;
     private Context mCtx;
 
-    public MovieAdapter(List<MovieModel> mMovieList, Context mContext) {
+    public MovieAdapter(ArrayList<MovieModel> mMovieList, Context mContext) {
         this.mMovieList = mMovieList;
-        mInflater = LayoutInflater.from(mContext);
         mCtx = mContext;
     }
 
     @NonNull
     @Override
-    public MovieAdapter.MovieHolder onCreateViewHolder(@NonNull ViewGroup parent, int position) {
-        View view = mInflater.inflate(
+    public MovieAdapter.MovieHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View mView = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.movie_sample_card,
                 parent,
                 false);
-        return new MovieHolder(view);
+        return new MovieHolder(mView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MovieHolder holder, int position, @NonNull List<Object> payloads) {
-        super.onBindViewHolder(holder, position, payloads);
-        holder.mTitle.setText(mMovieList.get(position).getTitle());
-        holder.mOverview.setText(mMovieList.get(position).getOverview());
-        Picasso.with(mCtx).load(mMovieList.get(position).getBackdrop_path()).into(holder.mImageBg);
+    public void onBindViewHolder(@NonNull MovieAdapter.MovieHolder holder, int position) {
+        holder.bindMovies(mMovieList.get(position));
+        holder.itemView.setOnClickListener(v -> {
+            String id = mMovieList.get(position).getId();
+            Intent mIntent = new Intent(mCtx, MovieDetailActivity.class);
+            mIntent.putExtra("id", id);
+            holder.itemView.getContext().startActivity(mIntent);
+        });
     }
 
     @Override
@@ -53,14 +56,23 @@ public abstract class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.Mov
 
     class MovieHolder extends RecyclerView.ViewHolder {
         TextView mTitle, mOverview;
-        ImageView mImageBg;
-        View mView;
+        ImageView mBackground;
+        String id;
         MovieHolder(View itemView) {
             super(itemView);
-            this.mView = itemView;
-            this.mTitle = itemView.findViewById(R.id.textMovieTitle);
-            this.mOverview = itemView.findViewById(R.id.textMovieOverview);
-            this.mImageBg = itemView.findViewById(R.id.imageMovieBg);
+            mCtx = itemView.getContext();
+            mTitle = itemView.findViewById(R.id.textMovieTitle);
+            mOverview = itemView.findViewById(R.id.textMovieOverview);
+            mBackground = itemView.findViewById(R.id.imageMovieBg);
+        }
+
+        void bindMovies(MovieModel movieModel) {
+            Picasso.with(mCtx)
+                    .load(movieModel.getBackdrop_path())
+                    .into(mBackground);
+            mTitle.setText(movieModel.getTitle());
+            mOverview.setText(movieModel.getOverview());
+            id = movieModel.getId();
         }
     }
 }

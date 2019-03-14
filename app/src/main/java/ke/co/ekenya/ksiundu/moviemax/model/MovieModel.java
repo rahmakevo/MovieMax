@@ -4,6 +4,18 @@ public class MovieModel {
     private String backdrop_path;
     private String title;
     private String overview;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public MovieModel() {
+    }
 
     public String getBackdrop_path() {
         return backdrop_path;
