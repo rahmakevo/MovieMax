@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.ngallazzi.speedandrpmdashboard.DigitalSpeedDashboard;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -25,7 +23,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     private ArrayList<MovieCompanies> mCompanyList = new ArrayList<>();
     private TextView mTitle, mOverview;
     private ImageView mMovieBg;
-    private DigitalSpeedDashboard mMovieVoteBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +34,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         mTitle = findViewById(R.id.textMovieDetailTitle);
         mOverview = findViewById(R.id.textMovieDetailOverview);
         mMovieBg = findViewById(R.id.imageMovieDetailBg);
-        mMovieVoteBar = findViewById(R.id.progressMovieDetailVotes);
 
     }
 
@@ -89,8 +85,6 @@ public class MovieDetailActivity extends AppCompatActivity {
             Picasso.with(getApplicationContext())
                     .load(image)
                     .into(mMovieBg);
-            mMovieVoteBar.setMaxSpeed(100);
-            mMovieVoteBar.setSpeed(100);
         }
     }
 }
